@@ -1,0 +1,354 @@
+
+
+================================================================
+== Synthesis Summary Report of 'mlp_top'
+================================================================
++ General Information: 
+    * Date:           Sun Nov 22 16:09:44 2026
+    * Version:        2025.1 (Build 6135595 on May 21 2025)
+    * Project:        component_interface_stream
+    * Solution:       hls (Vivado IP Flow Target)
+    * Product family: zynq
+    * Target device:  xc7z010-clg400-1
+    
+
++ Performance & Resource Estimates: 
+    
+    PS: '+' for module; 'o' for loop; '*' for dataflow
+    +--------------------------------+---------+-------+---------+-----------+----------+---------+------+----------+----------+----------+-----------+------------+-----+
+    |             Modules            |  Issue  |       |       Latency       | Iteration|         | Trip |          |          |          |           |            |     |
+    |             & Loops            |   Type  | Slack | (cycles)|    (ns)   |  Latency | Interval| Count| Pipelined|   BRAM   |    DSP   |     FF    |     LUT    | URAM|
+    +--------------------------------+---------+-------+---------+-----------+----------+---------+------+----------+----------+----------+-----------+------------+-----+
+    |+ mlp_top                       |   Timing|  -0.01|     1845|  1.845e+04|         -|     1846|     -|        no|  26 (21%)|  38 (47%)|  2266 (6%)|  3291 (18%)|    -|
+    | + Model                        |   Timing|  -0.01|     1057|  1.057e+04|         -|     1057|     -|        no|  25 (20%)|  38 (47%)|  2004 (5%)|  2994 (17%)|    -|
+    |  + Model_Pipeline_LAYER1_LOOP  |        -|   2.39|      789|  7.890e+03|         -|      785|     -|    rewind|  25 (20%)|  25 (31%)|   484 (1%)|    546 (3%)|    -|
+    |   o LAYER1_LOOP                |        -|   7.30|      787|  7.870e+03|         5|        1|   784|       yes|         -|         -|          -|           -|    -|
+    |  + Model_Pipeline_LAYER1_ACT   |   Timing|  -0.01|      153|  1.530e+03|         -|      152|     -|    rewind|         -|         -|   519 (1%)|    762 (4%)|    -|
+    |   o LAYER1_ACT                 |       II|   7.30|      151|  1.510e+03|         8|        6|    25|       yes|         -|         -|          -|           -|    -|
+    |    + Activation                |        -|   0.67|        4|     40.000|         -|        1|     -|       yes|         -|    3 (3%)|  293 (~0%)|    534 (3%)|    -|
+    |  + Model_Pipeline_LAYER2_LOOP  |        -|   2.34|       30|    300.000|         -|       26|     -|    rewind|         -|  10 (12%)|   378 (1%)|    442 (2%)|    -|
+    |   o LAYER2_LOOP                |        -|   7.30|       28|    280.000|         5|        1|    25|       yes|         -|         -|          -|           -|    -|
+    |  + Model_Pipeline_LAYER2_ACT   |        -|   0.06|       63|    630.000|         -|       62|     -|    rewind|         -|         -|  239 (~0%)|    397 (2%)|    -|
+    |   o LAYER2_ACT                 |       II|   7.30|       61|    610.000|         8|        6|    10|       yes|         -|         -|          -|           -|    -|
+    |    + Activation                |        -|   0.67|        4|     40.000|         -|        1|     -|       yes|         -|    3 (3%)|  293 (~0%)|    534 (3%)|    -|
+    |  + Model_Pipeline_COPMARE      |        -|   2.39|       12|    120.000|         -|       11|     -|    rewind|         -|         -|   75 (~0%)|    206 (1%)|    -|
+    |   o COPMARE                    |        -|   7.30|       10|    100.000|         2|        1|    10|       yes|         -|         -|          -|           -|    -|
+    | o UNPACK_BITS                  |        -|   7.30|      785|  7.850e+03|         3|        1|   784|       yes|         -|         -|          -|           -|    -|
+    +--------------------------------+---------+-------+---------+-----------+----------+---------+------+----------+----------+----------+-----------+------------+-----+
+
+
+================================================================
+== HW Interfaces
+================================================================
+* S_AXILITE Interfaces
++---------------+------------+---------------+--------+----------+
+| Interface     | Data Width | Address Width | Offset | Register |
++---------------+------------+---------------+--------+----------+
+| s_axi_control | 32         | 8             | 128    | 0        |
++---------------+------------+---------------+--------+----------+
+
+* S_AXILITE Registers
++---------------+---------------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| Interface     | Register      | Offset | Width | Access | Description                      | Bit Fields                                                           |
++---------------+---------------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| s_axi_control | CTRL          | 0x00   | 32    | RW     | Control signals                  | 0=AP_START 1=AP_DONE 2=AP_IDLE 3=AP_READY 7=AUTO_RESTART 9=INTERRUPT |
+| s_axi_control | GIER          | 0x04   | 32    | RW     | Global Interrupt Enable Register | 0=Enable                                                             |
+| s_axi_control | IP_IER        | 0x08   | 32    | RW     | IP Interrupt Enable Register     | 0=CHAN0_INT_EN 1=CHAN1_INT_EN                                        |
+| s_axi_control | IP_ISR        | 0x0c   | 32    | RW     | IP Interrupt Status Register     | 0=CHAN0_INT_ST 1=CHAN1_INT_ST                                        |
+| s_axi_control | output_r      | 0x10   | 32    | R      | Data signal of output_r          |                                                                      |
+| s_axi_control | output_r_ctrl | 0x14   | 32    | R      | Control signal of output_r       | 0=output_r_ap_vld                                                    |
++---------------+---------------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+
+* TOP LEVEL CONTROL
++-----------+------------+-----------+
+| Interface | Type       | Ports     |
++-----------+------------+-----------+
+| ap_clk    | clock      | ap_clk    |
+| ap_rst_n  | reset      | ap_rst_n  |
+| interrupt | interrupt  | interrupt |
+| ap_ctrl   | ap_ctrl_hs |           |
++-----------+------------+-----------+
+
+
+================================================================
+== SW I/O Information
+================================================================
+* Top Function Arguments
++----------+-----------+----------------------+
+| Argument | Direction | Datatype             |
++----------+-----------+----------------------+
+| img_bits | in        | unsigned int const * |
+| output   | out       | int*                 |
++----------+-----------+----------------------+
+
+* SW-to-HW Mapping
++----------+---------------+----------+-----------------------------------------+
+| Argument | HW Interface  | HW Type  | HW Info                                 |
++----------+---------------+----------+-----------------------------------------+
+| img_bits | s_axi_control | memory   | name=img_bits offset=128 range=128      |
+| output   | s_axi_control | register | name=output_r offset=0x10 range=32      |
+| output   | s_axi_control | register | name=output_r_ctrl offset=0x14 range=32 |
++----------+---------------+----------+-----------------------------------------+
+
+
+================================================================
+== Bind Op Report
+================================================================
++-----------------------------------------+-----+--------+---------------+-----------+--------------------------+---------+
+| Name                                    | DSP | Pragma | Variable      | Op        | Impl                     | Latency |
++-----------------------------------------+-----+--------+---------------+-----------+--------------------------+---------+
+| + mlp_top                               | 38  |        |               |           |                          |         |
+|   bitselect_1ns_32ns_5ns_1_1_1_U237     |     |        | bit           | bitselect | auto                     | 0       |
+|   select_ln124_fu_321_p3                |     |        | select_ln124  | select    | auto_sel                 | 0       |
+|   idx_fu_297_p2                         |     |        | idx           | add       | fabric                   | 0       |
+|   icmp_ln119_fu_303_p2                  |     |        | icmp_ln119    | seteq     | auto                     | 0       |
+|  + Model                                | 38  |        |               |           |                          |         |
+|   + Model_Pipeline_LAYER1_LOOP          | 25  |        |               |           |                          |         |
+|     icmp_ln59_fu_888_p2                 |     |        | icmp_ln59     | seteq     | auto                     | 0       |
+|     add_ln59_fu_894_p2                  |     |        | add_ln59      | add       | fabric                   | 0       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U1   | 1   |        | mul_ln65      | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U1   | 1   |        | sext_ln65_1   | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U1   | 1   |        | add_ln65      | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U2   | 1   |        | mul_ln65_1    | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U2   | 1   |        | sext_ln65_3   | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U2   | 1   |        | add_ln65_1    | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U3   | 1   |        | mul_ln65_2    | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U3   | 1   |        | sext_ln65_5   | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U3   | 1   |        | add_ln65_2    | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U4   | 1   |        | mul_ln65_3    | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U4   | 1   |        | sext_ln65_7   | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U4   | 1   |        | add_ln65_3    | add       | dsp_slice                | 3       |
+|     mac_muladd_12s_11ns_26s_26_4_1_U5   | 1   |        | mul_ln65_4    | mul       | dsp_slice                | 3       |
+|     mac_muladd_12s_11ns_26s_26_4_1_U5   | 1   |        | sext_ln65_9   | sext      | dsp_slice                | 3       |
+|     mac_muladd_12s_11ns_26s_26_4_1_U5   | 1   |        | add_ln65_4    | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U6   | 1   |        | mul_ln65_5    | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U6   | 1   |        | sext_ln65_11  | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U6   | 1   |        | add_ln65_5    | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U7   | 1   |        | mul_ln65_6    | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U7   | 1   |        | sext_ln65_13  | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U7   | 1   |        | add_ln65_6    | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U8   | 1   |        | mul_ln65_7    | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U8   | 1   |        | sext_ln65_15  | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U8   | 1   |        | add_ln65_7    | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U9   | 1   |        | mul_ln65_8    | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U9   | 1   |        | sext_ln65_17  | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U9   | 1   |        | add_ln65_8    | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U10  | 1   |        | mul_ln65_9    | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U10  | 1   |        | sext_ln65_19  | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U10  | 1   |        | add_ln65_9    | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U11  | 1   |        | mul_ln65_10   | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U11  | 1   |        | sext_ln65_21  | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U11  | 1   |        | add_ln65_10   | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U12  | 1   |        | mul_ln65_11   | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U12  | 1   |        | sext_ln65_23  | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U12  | 1   |        | add_ln65_11   | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U13  | 1   |        | mul_ln65_12   | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U13  | 1   |        | sext_ln65_25  | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U13  | 1   |        | add_ln65_12   | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U14  | 1   |        | mul_ln65_13   | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U14  | 1   |        | sext_ln65_27  | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U14  | 1   |        | add_ln65_13   | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U15  | 1   |        | mul_ln65_14   | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U15  | 1   |        | sext_ln65_29  | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U15  | 1   |        | add_ln65_14   | add       | dsp_slice                | 3       |
+|     mac_muladd_12s_11ns_26s_26_4_1_U16  | 1   |        | mul_ln65_15   | mul       | dsp_slice                | 3       |
+|     mac_muladd_12s_11ns_26s_26_4_1_U16  | 1   |        | sext_ln65_31  | sext      | dsp_slice                | 3       |
+|     mac_muladd_12s_11ns_26s_26_4_1_U16  | 1   |        | add_ln65_15   | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U17  | 1   |        | mul_ln65_16   | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U17  | 1   |        | sext_ln65_33  | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U17  | 1   |        | add_ln65_16   | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U18  | 1   |        | mul_ln65_17   | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U18  | 1   |        | sext_ln65_35  | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U18  | 1   |        | add_ln65_17   | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U19  | 1   |        | mul_ln65_18   | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U19  | 1   |        | sext_ln65_37  | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U19  | 1   |        | add_ln65_18   | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U20  | 1   |        | mul_ln65_19   | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U20  | 1   |        | sext_ln65_39  | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U20  | 1   |        | add_ln65_19   | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U21  | 1   |        | mul_ln65_20   | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U21  | 1   |        | sext_ln65_41  | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U21  | 1   |        | add_ln65_20   | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U22  | 1   |        | mul_ln65_21   | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U22  | 1   |        | sext_ln65_43  | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U22  | 1   |        | add_ln65_21   | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U23  | 1   |        | mul_ln65_22   | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U23  | 1   |        | sext_ln65_45  | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U23  | 1   |        | add_ln65_22   | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U24  | 1   |        | mul_ln65_23   | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U24  | 1   |        | sext_ln65_47  | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U24  | 1   |        | add_ln65_23   | add       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U25  | 1   |        | mul_ln65_24   | mul       | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U25  | 1   |        | sext_ln65_49  | sext      | dsp_slice                | 3       |
+|     mac_muladd_11s_11ns_26s_26_4_1_U25  | 1   |        | add_ln65_24   | add       | dsp_slice                | 3       |
+|   + Model_Pipeline_LAYER1_ACT           | 0   |        |               |           |                          |         |
+|     icmp_ln70_fu_822_p2                 |     |        | icmp_ln70     | seteq     | auto                     | 0       |
+|     add_ln70_fu_885_p2                  |     |        | add_ln70      | add       | fabric                   | 0       |
+|     sparsemux_51_5_16_1_1_U90           |     |        | tmp           | sparsemux | compactencoding_dontcare | 0       |
+|     b1_fu_1076_p2                       |     |        | b1            | add       | fabric                   | 0       |
+|    + Activation (grp_Activation_fu_680) | 3   |        |               |           |                          |         |
+|      sub_ln25_fu_81_p2                  |     |        | sub_ln25      | sub       | fabric                   | 0       |
+|      abs_z_fu_87_p3                     |     |        | abs_z         | select    | auto_sel                 | 0       |
+|      mac_muladd_16s_9ns_20ns_25_4_1_U82 | 1   |        | mul_ln27      | mul       | dsp_slice                | 3       |
+|      mac_muladd_16s_9ns_20ns_25_4_1_U82 | 1   |        | add_ln27      | add       | dsp_slice                | 3       |
+|      mul_16s_7s_23_1_1_U81              | 1   |        | mul_ln27_1    | mul       | auto                     | 0       |
+|      mac_muladd_23s_16s_35s_36_4_1_U83  | 1   |        | mul_ln27_2    | mul       | dsp_slice                | 3       |
+|      mac_muladd_23s_16s_35s_36_4_1_U83  | 1   |        | add_ln27_1    | add       | dsp_slice                | 3       |
+|      ctlz_16_16_1_1_U80                 |     |        | tmp_4         | ctlz      | auto                     | 0       |
+|      add_ln29_fu_115_p2                 |     |        | add_ln29      | add       | fabric                   | 0       |
+|      shl_ln29_fu_161_p2                 |     |        | shl_ln29      | shl       | auto_pipe                | 0       |
+|      select_ln29_fu_189_p3              |     |        | select_ln29   | select    | auto_sel                 | 0       |
+|      sub_ln29_fu_197_p2                 |     |        | sub_ln29      | sub       | fabric                   | 0       |
+|      add_ln29_1_fu_206_p2               |     |        | add_ln29_1    | add       | fabric                   | 0       |
+|      dcmp_64ns_64ns_1_2_no_dsp_1_U79    |     |        | tmp_2         | dcmp      | auto                     | 1       |
+|      not_icmp_ln29_fu_121_p2            |     |        | not_icmp_ln29 | setne     | auto                     | 0       |
+|      phi_ln29_fu_255_p2                 |     |        | phi_ln29      | and       | auto                     | 0       |
+|      y_tmp_1_fu_259_p2                  |     |        | y_tmp_1       | sub       | fabric                   | 0       |
+|      y_tmp_2_fu_265_p3                  |     |        | y_tmp_2       | select    | auto_sel                 | 0       |
+|      icmp_ln34_fu_127_p2                |     |        | icmp_ln34     | setgt     | auto                     | 0       |
+|      icmp_ln36_fu_133_p2                |     |        | icmp_ln36     | setlt     | auto                     | 0       |
+|      select_ln34_fu_273_p3              |     |        | select_ln34   | select    | auto_sel                 | 0       |
+|      or_ln34_fu_280_p2                  |     |        | or_ln34       | or        | auto                     | 0       |
+|      ap_return                          |     |        | y_tmp_3       | select    | auto_sel                 | 0       |
+|   + Model_Pipeline_LAYER2_LOOP          | 10  |        |               |           |                          |         |
+|     icmp_ln77_fu_632_p2                 |     |        | icmp_ln77     | seteq     | auto                     | 0       |
+|     add_ln77_fu_638_p2                  |     |        | add_ln77      | add       | fabric                   | 0       |
+|     sparsemux_51_5_16_1_1_U143          |     |        | tmp_1         | sparsemux | compactencoding_dontcare | 0       |
+|     mac_muladd_16s_13s_26ns_26_4_1_U144 | 1   |        | mul_ln82      | mul       | dsp_slice                | 3       |
+|     mac_muladd_16s_13s_26ns_26_4_1_U144 | 1   |        | add_ln82      | add       | dsp_slice                | 3       |
+|     mac_muladd_16s_12s_26ns_26_4_1_U145 | 1   |        | mul_ln82_1    | mul       | dsp_slice                | 3       |
+|     mac_muladd_16s_12s_26ns_26_4_1_U145 | 1   |        | add_ln82_1    | add       | dsp_slice                | 3       |
+|     mac_muladd_16s_12s_26ns_26_4_1_U146 | 1   |        | mul_ln82_2    | mul       | dsp_slice                | 3       |
+|     mac_muladd_16s_12s_26ns_26_4_1_U146 | 1   |        | add_ln82_2    | add       | dsp_slice                | 3       |
+|     mac_muladd_16s_12s_26ns_26_4_1_U147 | 1   |        | mul_ln82_3    | mul       | dsp_slice                | 3       |
+|     mac_muladd_16s_12s_26ns_26_4_1_U147 | 1   |        | add_ln82_3    | add       | dsp_slice                | 3       |
+|     mac_muladd_16s_13s_26ns_26_4_1_U148 | 1   |        | mul_ln82_4    | mul       | dsp_slice                | 3       |
+|     mac_muladd_16s_13s_26ns_26_4_1_U148 | 1   |        | add_ln82_4    | add       | dsp_slice                | 3       |
+|     mac_muladd_16s_12s_26ns_26_4_1_U149 | 1   |        | mul_ln82_5    | mul       | dsp_slice                | 3       |
+|     mac_muladd_16s_12s_26ns_26_4_1_U149 | 1   |        | add_ln82_5    | add       | dsp_slice                | 3       |
+|     mac_muladd_16s_12s_26ns_26_4_1_U150 | 1   |        | mul_ln82_6    | mul       | dsp_slice                | 3       |
+|     mac_muladd_16s_12s_26ns_26_4_1_U150 | 1   |        | add_ln82_6    | add       | dsp_slice                | 3       |
+|     mac_muladd_16s_12s_26ns_26_4_1_U151 | 1   |        | mul_ln82_7    | mul       | dsp_slice                | 3       |
+|     mac_muladd_16s_12s_26ns_26_4_1_U151 | 1   |        | add_ln82_7    | add       | dsp_slice                | 3       |
+|     mac_muladd_16s_12s_26ns_26_4_1_U152 | 1   |        | mul_ln82_8    | mul       | dsp_slice                | 3       |
+|     mac_muladd_16s_12s_26ns_26_4_1_U152 | 1   |        | add_ln82_8    | add       | dsp_slice                | 3       |
+|     mac_muladd_16s_13s_26ns_26_4_1_U153 | 1   |        | mul_ln82_9    | mul       | dsp_slice                | 3       |
+|     mac_muladd_16s_13s_26ns_26_4_1_U153 | 1   |        | add_ln82_9    | add       | dsp_slice                | 3       |
+|   + Model_Pipeline_LAYER2_ACT           | 0   |        |               |           |                          |         |
+|     icmp_ln87_fu_372_p2                 |     |        | icmp_ln87     | seteq     | auto                     | 0       |
+|     add_ln87_fu_405_p2                  |     |        | add_ln87      | add       | fabric                   | 0       |
+|     sparsemux_21_4_16_1_1_U201          |     |        | tmp_2         | sparsemux | compactencoding_dontcare | 0       |
+|     b2_fu_491_p2                        |     |        | b2            | add       | fabric                   | 0       |
+|    + Activation (grp_Activation_fu_305) | 3   |        |               |           |                          |         |
+|      sub_ln25_fu_81_p2                  |     |        | sub_ln25      | sub       | fabric                   | 0       |
+|      abs_z_fu_87_p3                     |     |        | abs_z         | select    | auto_sel                 | 0       |
+|      mac_muladd_16s_9ns_20ns_25_4_1_U82 | 1   |        | mul_ln27      | mul       | dsp_slice                | 3       |
+|      mac_muladd_16s_9ns_20ns_25_4_1_U82 | 1   |        | add_ln27      | add       | dsp_slice                | 3       |
+|      mul_16s_7s_23_1_1_U81              | 1   |        | mul_ln27_1    | mul       | auto                     | 0       |
+|      mac_muladd_23s_16s_35s_36_4_1_U83  | 1   |        | mul_ln27_2    | mul       | dsp_slice                | 3       |
+|      mac_muladd_23s_16s_35s_36_4_1_U83  | 1   |        | add_ln27_1    | add       | dsp_slice                | 3       |
+|      ctlz_16_16_1_1_U80                 |     |        | tmp_4         | ctlz      | auto                     | 0       |
+|      add_ln29_fu_115_p2                 |     |        | add_ln29      | add       | fabric                   | 0       |
+|      shl_ln29_fu_161_p2                 |     |        | shl_ln29      | shl       | auto_pipe                | 0       |
+|      select_ln29_fu_189_p3              |     |        | select_ln29   | select    | auto_sel                 | 0       |
+|      sub_ln29_fu_197_p2                 |     |        | sub_ln29      | sub       | fabric                   | 0       |
+|      add_ln29_1_fu_206_p2               |     |        | add_ln29_1    | add       | fabric                   | 0       |
+|      dcmp_64ns_64ns_1_2_no_dsp_1_U79    |     |        | tmp_2         | dcmp      | auto                     | 1       |
+|      not_icmp_ln29_fu_121_p2            |     |        | not_icmp_ln29 | setne     | auto                     | 0       |
+|      phi_ln29_fu_255_p2                 |     |        | phi_ln29      | and       | auto                     | 0       |
+|      y_tmp_1_fu_259_p2                  |     |        | y_tmp_1       | sub       | fabric                   | 0       |
+|      y_tmp_2_fu_265_p3                  |     |        | y_tmp_2       | select    | auto_sel                 | 0       |
+|      icmp_ln34_fu_127_p2                |     |        | icmp_ln34     | setgt     | auto                     | 0       |
+|      icmp_ln36_fu_133_p2                |     |        | icmp_ln36     | setlt     | auto                     | 0       |
+|      select_ln34_fu_273_p3              |     |        | select_ln34   | select    | auto_sel                 | 0       |
+|      or_ln34_fu_280_p2                  |     |        | or_ln34       | or        | auto                     | 0       |
+|      ap_return                          |     |        | y_tmp_3       | select    | auto_sel                 | 0       |
+|   + Model_Pipeline_COPMARE              | 0   |        |               |           |                          |         |
+|     icmp_ln96_fu_169_p2                 |     |        | icmp_ln96     | seteq     | auto                     | 0       |
+|     add_ln96_fu_175_p2                  |     |        | add_ln96      | add       | fabric                   | 0       |
+|     sparsemux_21_4_16_1_1_U224          |     |        | tmp_3         | sparsemux | compactencoding_dontcare | 0       |
+|     icmp_ln98_fu_240_p2                 |     |        | icmp_ln98     | setgt     | auto                     | 0       |
+|     select_ln98_fu_245_p3               |     |        | select_ln98   | select    | auto_sel                 | 0       |
+|     max_i_1_fu_255_p3                   |     |        | max_i_1       | select    | auto_sel                 | 0       |
++-----------------------------------------+-----+--------+---------------+-----------+--------------------------+---------+
+
+
+================================================================
+== Storage Report
+================================================================
++--------------------------------+--------------+-----------+------+------+--------+------------+------+---------+------------------+
+| Name                           | Usage        | Type      | BRAM | URAM | Pragma | Variable   | Impl | Latency | Bitwidth, Depth, |
+|                                |              |           |      |      |        |            |      |         | Banks            |
++--------------------------------+--------------+-----------+------+------+--------+------------+------+---------+------------------+
+| + mlp_top                      |              |           | 26   | 0    |        |            |      |         |                  |
+|   control_s_axi_U              | interface    | s_axilite |      |      |        |            |      |         |                  |
+|   input_U                      | ram_1p array |           | 1    |      |        | input      | auto | 1       | 11, 784, 1       |
+|  + Model                       |              |           | 25   | 0    |        |            |      |         |                  |
+|   + Model_Pipeline_LAYER1_LOOP |              |           | 25   | 0    |        |            |      |         |                  |
+|     p_ZL2w1_0_U                | rom_1p       |           | 1    |      |        | p_ZL2w1_0  | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_1_U                | rom_1p       |           | 1    |      |        | p_ZL2w1_1  | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_2_U                | rom_1p       |           | 1    |      |        | p_ZL2w1_2  | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_3_U                | rom_1p       |           | 1    |      |        | p_ZL2w1_3  | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_4_U                | rom_1p       |           | 1    |      |        | p_ZL2w1_4  | auto | 1       | 12, 784, 1       |
+|     p_ZL2w1_5_U                | rom_1p       |           | 1    |      |        | p_ZL2w1_5  | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_6_U                | rom_1p       |           | 1    |      |        | p_ZL2w1_6  | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_7_U                | rom_1p       |           | 1    |      |        | p_ZL2w1_7  | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_8_U                | rom_1p       |           | 1    |      |        | p_ZL2w1_8  | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_9_U                | rom_1p       |           | 1    |      |        | p_ZL2w1_9  | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_10_U               | rom_1p       |           | 1    |      |        | p_ZL2w1_10 | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_11_U               | rom_1p       |           | 1    |      |        | p_ZL2w1_11 | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_12_U               | rom_1p       |           | 1    |      |        | p_ZL2w1_12 | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_13_U               | rom_1p       |           | 1    |      |        | p_ZL2w1_13 | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_14_U               | rom_1p       |           | 1    |      |        | p_ZL2w1_14 | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_15_U               | rom_1p       |           | 1    |      |        | p_ZL2w1_15 | auto | 1       | 12, 784, 1       |
+|     p_ZL2w1_16_U               | rom_1p       |           | 1    |      |        | p_ZL2w1_16 | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_17_U               | rom_1p       |           | 1    |      |        | p_ZL2w1_17 | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_18_U               | rom_1p       |           | 1    |      |        | p_ZL2w1_18 | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_19_U               | rom_1p       |           | 1    |      |        | p_ZL2w1_19 | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_20_U               | rom_1p       |           | 1    |      |        | p_ZL2w1_20 | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_21_U               | rom_1p       |           | 1    |      |        | p_ZL2w1_21 | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_22_U               | rom_1p       |           | 1    |      |        | p_ZL2w1_22 | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_23_U               | rom_1p       |           | 1    |      |        | p_ZL2w1_23 | auto | 1       | 11, 784, 1       |
+|     p_ZL2w1_24_U               | rom_1p       |           | 1    |      |        | p_ZL2w1_24 | auto | 1       | 11, 784, 1       |
+|   + Model_Pipeline_LAYER1_ACT  |              |           | 0    | 0    |        |            |      |         |                  |
+|     w1_b_U                     | rom_1p       |           |      |      |        | w1_b       | auto | 1       | 11, 25, 1        |
+|   + Model_Pipeline_LAYER2_LOOP |              |           | 0    | 0    |        |            |      |         |                  |
+|     p_ZL2w2_0_U                | rom_1p       |           |      |      |        | p_ZL2w2_0  | auto | 1       | 13, 25, 1        |
+|     p_ZL2w2_1_U                | rom_1p       |           |      |      |        | p_ZL2w2_1  | auto | 1       | 12, 25, 1        |
+|     p_ZL2w2_2_U                | rom_1p       |           |      |      |        | p_ZL2w2_2  | auto | 1       | 12, 25, 1        |
+|     p_ZL2w2_3_U                | rom_1p       |           |      |      |        | p_ZL2w2_3  | auto | 1       | 12, 25, 1        |
+|     p_ZL2w2_4_U                | rom_1p       |           |      |      |        | p_ZL2w2_4  | auto | 1       | 13, 25, 1        |
+|     p_ZL2w2_5_U                | rom_1p       |           |      |      |        | p_ZL2w2_5  | auto | 1       | 12, 25, 1        |
+|     p_ZL2w2_6_U                | rom_1p       |           |      |      |        | p_ZL2w2_6  | auto | 1       | 12, 25, 1        |
+|     p_ZL2w2_7_U                | rom_1p       |           |      |      |        | p_ZL2w2_7  | auto | 1       | 12, 25, 1        |
+|     p_ZL2w2_8_U                | rom_1p       |           |      |      |        | p_ZL2w2_8  | auto | 1       | 12, 25, 1        |
+|     p_ZL2w2_9_U                | rom_1p       |           |      |      |        | p_ZL2w2_9  | auto | 1       | 13, 25, 1        |
+|   + Model_Pipeline_LAYER2_ACT  |              |           | 0    | 0    |        |            |      |         |                  |
+|     w2_b_U                     | rom_1p       |           |      |      |        | w2_b       | auto | 1       | 10, 10, 1        |
++--------------------------------+--------------+-----------+------+------+--------+------------+------+---------+------------------+
+
+
+================================================================
+== Pragma Report
+================================================================
+* Valid Pragma Syntax
++-----------------+---------------------------------------------------+----------------------------------------------+
+| Type            | Options                                           | Location                                     |
++-----------------+---------------------------------------------------+----------------------------------------------+
+| INLINE          | off                                               | model.cpp:54 in model                        |
+| INTERFACE       | mode = s_axilite port = return bundle = control   | model.cpp:112 in mlp_top                     |
+| INTERFACE       | mode = s_axilite port = img_bits bundle = control | model.cpp:113 in mlp_top                     |
+| INTERFACE       | mode = s_axilite port = output bundle = control   | model.cpp:114 in mlp_top                     |
+| PIPELINE        | II = 1                                            | model.cpp:121 in mlp_top                     |
+| ARRAY_PARTITION | complete dim=0 variable=coeff                     | configs/solution3.tcl:6 in activation, coeff |
+| ARRAY_PARTITION | complete dim=1 variable=b1                        | configs/solution3.tcl:8 in model, b1         |
+| ARRAY_PARTITION | complete dim=1 variable=b2                        | configs/solution3.tcl:9 in model, b2         |
+| ARRAY_PARTITION | complete dim=2 variable=w1                        | configs/solution3.tcl:11 in model, w1        |
+| ARRAY_PARTITION | complete dim=2 variable=w2                        | configs/solution3.tcl:12 in model, w2        |
+| PIPELINE        | ii=1                                              | configs/solution3.tcl:14 in model            |
+| PIPELINE        | ii=1                                              | configs/solution3.tcl:17 in model            |
+| UNROLL          |                                                   | configs/solution3.tcl:15 in model            |
+| UNROLL          |                                                   | configs/solution3.tcl:18 in model            |
++-----------------+---------------------------------------------------+----------------------------------------------+
+
+
